@@ -25,3 +25,11 @@ Os dados utilizados contêm informações mensais por bairro relacionadas aos pr
 A partir desses dados, será implementada uma arquitetura de dados em camadas Bronze, Silver e Gold, utilizando o Databricks Free Edition. A camada Bronze armazenará os dados em seu estado original; a Silver será responsável pela limpeza, padronização, integração e validação; e a Gold disponibilizará os dados estruturados para análises por meio de um modelo dimensional.
 
 O resultado esperado é disponibilizar uma estrutura analítica capaz de comparar diferentes mercados imobiliários e identificar padrões relacionados a preços, oferta, liquidez e evolução temporal.
+
+## Perguntas do Projeto 
+Quais cidades e bairros apresentam os maiores e menores preços medianos por metro quadrado para venda e aluguel?
+Como o preço mediano por metro quadrado evoluiu ao longo do período analisado nas cinco cidades?
+Quais cidades e bairros apresentam maior volume de novos anúncios e maior oferta média de imóveis?
+Quais localidades apresentam maior e menor tempo médio de permanência dos imóveis no mercado?
+Existe relação entre o preço mediano por metro quadrado e o tempo médio de permanência dos imóveis no mercado?
+Quais localidades apresentam simultaneamente crescimento do preço mediano por metro quadrado e aumento da oferta de imóveis ao longo do período?

@@ -124,7 +124,7 @@ As tabelas resultantes da camada Gold foram:
 
 O catálogo técnico das tabelas foi implementado no **Unity Catalog do Databricks**, onde foram adicionadas descrições às tabelas e aos seus respectivos campos.
 
-A documentação do catálogo contempla a finalidade das tabelas e o significado dos atributos utilizados no pipeline. Além da documentação registrada no Unity Catalog, o projeto apresenta a seguir a estrutura lógica dos principais campos utilizados no modelo dimensional.
+A documentação contempla a finalidade de cada tabela, o significado dos atributos, os tipos de dados, os domínios ou valores esperados e a origem ou transformação associada aos campos utilizados no modelo dimensional.
 
 #### Dimensão Tempo — `dim_tempo`
 
@@ -140,30 +140,30 @@ A documentação do catálogo contempla a finalidade das tabelas e o significado
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
 | `id_localidade` | INT | Chave substituta da dimensão localidade | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
-| `cidade` | STRING | Cidade da observação | Salvador, São Paulo, Rio de Janeiro, Recife ou Curitiba | Proveniente da camada Silver |
-| `uf` | STRING | Unidade Federativa | BA, SP, RJ, PE ou PR | Proveniente da camada Silver |
-| `bairro` | STRING | Bairro associado à observação | Bairros existentes na base | Proveniente da camada Silver |
+| `cidade` | STRING | Cidade associada à observação | Salvador, São Paulo, Rio de Janeiro, Recife ou Curitiba | Proveniente do campo `cidade` da camada Silver |
+| `uf` | STRING | Unidade Federativa associada à cidade | BA, SP, RJ, PE ou PR | Proveniente do campo `uf` da camada Silver |
+| `bairro` | STRING | Bairro associado à observação | Bairros existentes no conjunto de dados | Proveniente do campo `bairro` da camada Silver |
 
 #### Dimensão Transação — `dim_transacao`
 
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
 | `id_transacao` | INT | Chave substituta da dimensão transação | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
-| `transacao` | STRING | Tipo de transação imobiliária | `venda` ou `aluguel` | Campo padronizado na camada Silver |
+| `transacao` | STRING | Tipo de transação imobiliária | `venda` ou `aluguel` | Proveniente do campo `transacao`, padronizado na camada Silver |
 
 #### Tabela Fato — `fato_mercado_imobiliario`
 
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
-| `id_tempo` | BIGINT | Chave de relacionamento com `dim_tempo` | Chave válida da dimensão tempo | Relacionamento com `dim_tempo` |
-| `id_localidade` | BIGINT | Chave de relacionamento com `dim_localidade` | Chave válida da dimensão localidade | Relacionamento com `dim_localidade` |
-| `id_transacao` | BIGINT | Chave de relacionamento com `dim_transacao` | Chave válida da dimensão transação | Relacionamento com `dim_transacao` |
-| `mediana_m2` | INT | Preço mediano por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
+| `id_tempo` | INT | Chave de relacionamento com a dimensão tempo | Chave válida existente em `dim_tempo` | Obtida pelo relacionamento com `dim_tempo` |
+| `id_localidade` | INT | Chave de relacionamento com a dimensão localidade | Chave válida existente em `dim_localidade` | Obtida pelo relacionamento com `dim_localidade` |
+| `id_transacao` | INT | Chave de relacionamento com a dimensão transação | Chave válida existente em `dim_transacao` | Obtida pelo relacionamento com `dim_transacao` |
+| `mediana_m2` | INT | Valor mediano do preço por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
 | `p25_m2` | INT | Percentil 25 do preço por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
 | `p75_m2` | INT | Percentil 75 do preço por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
-| `anuncios_ativos_media_dia` | INT | Média diária de anúncios ativos | Valor igual ou superior a zero | Proveniente da camada Silver |
-| `novos_anuncios` | INT | Quantidade de novos anúncios | Valor igual ou superior a zero | Proveniente da camada Silver |
-| `dias_no_mercado_medio` | INT | Tempo médio de permanência dos imóveis no mercado | Valor igual ou superior a zero ou nulo | Proveniente da camada Silver |
+| `anuncios_ativos_media_dia` | INT | Quantidade média diária de anúncios ativos | Valor igual ou superior a zero | Proveniente da camada Silver |
+| `novos_anuncios` | INT | Quantidade de novos anúncios registrados no período | Valor igual ou superior a zero | Proveniente da camada Silver |
+| `dias_no_mercado_medio` | INT | Quantidade média de dias dos imóveis no mercado | Valor igual ou superior a zero ou nulo | Proveniente da camada Silver |
 
 ## 4. Pipeline de Dados
 

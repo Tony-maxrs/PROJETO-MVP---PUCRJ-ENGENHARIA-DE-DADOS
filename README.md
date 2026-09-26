@@ -33,3 +33,50 @@ O resultado esperado é disponibilizar uma estrutura analítica capaz de compara
 4. Como se comporta a oferta de imóveis nas cidades analisadas, considerando a quantidade média de anúncios ativos e a entrada de novos anúncios?
 5. Existem diferenças no tempo médio de permanência dos imóveis no mercado entre as cidades e entre os tipos de transação?
 6. Quais bairros apresentam os maiores preços medianos por metro quadrado em cada cidade?
+
+7. ## 2. Carga dos Dados
+
+### 2.1 Fonte dos Dados
+
+Os dados utilizados neste projeto foram obtidos a partir da base pública disponibilizada pelo **Guru dos Imóveis**, contendo informações do mercado imobiliário brasileiro.
+
+Foram utilizados arquivos no formato CSV referentes a cinco cidades:
+
+- Salvador - BA;
+- São Paulo - SP;
+- Rio de Janeiro - RJ;
+- Recife - PE;
+- Curitiba - PR.
+
+Os arquivos contêm observações mensais por bairro e tipo de transação, contemplando informações relacionadas a preço por metro quadrado, quantidade de anúncios ativos, novos anúncios e tempo médio de permanência dos imóveis no mercado.
+
+A fonte disponibiliza os dados sob a licença **CC BY 4.0 (Creative Commons Attribution 4.0)**.
+
+### 2.2 Ingestão dos Dados
+
+Os arquivos CSV foram carregados para um **Volume do Unity Catalog no Databricks**, utilizado como área de armazenamento dos arquivos de origem.
+
+A ingestão foi implementada utilizando **Apache Spark (PySpark)**. Inicialmente, os arquivos foram inspecionados individualmente para identificação da estrutura, esquema e possíveis particularidades de leitura.
+
+Após a validação, foi definido um esquema explícito para a ingestão, evitando dependência exclusiva da inferência automática de tipos.
+
+Durante o processo também foram adicionados metadados para permitir a identificação e rastreabilidade dos registros:
+
+- `arquivo_origem`: identifica o arquivo CSV de origem;
+- `cidade`: identifica a cidade correspondente ao arquivo;
+- `uf`: identifica a Unidade Federativa;
+- `data_ingestao`: registra o momento da ingestão no ambiente de dados.
+
+### 2.3 Camada Bronze
+
+Após a leitura e consolidação dos cinco arquivos, os dados foram armazenados na camada **Bronze** da arquitetura Medalhão.
+
+A camada Bronze tem como objetivo preservar os dados provenientes da fonte, acrescentando apenas os metadados necessários para identificação e rastreabilidade.
+
+A tabela criada foi:
+
+`mvp_imobiliario.bronze.mercado_imobiliario_raw`
+
+Ao final da ingestão, foram consolidados **36.933 registros**.
+
+A tabela foi persistida utilizando o formato **Delta**, permitindo que os dados armazenados no ambiente Databricks sejam utilizados pelas etapas posteriores do pipeline.

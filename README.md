@@ -509,3 +509,21 @@ O tempo de permanência apresentou diferenças relevantes entre venda e aluguel,
 Por fim, a análise por bairro revelou elevada heterogeneidade dentro das próprias cidades e também evidenciou a presença de valores extremos. Esses resultados reforçam a importância das etapas de avaliação da qualidade e contextualização dos dados antes da interpretação analítica.
 
 Considerando as seis perguntas definidas no início do projeto, o pipeline construído permitiu transformar os arquivos de origem em uma estrutura organizada e analítica, possibilitando responder às questões propostas a partir das tabelas da camada Gold.
+
+## 7. Autoavaliação
+
+O desenvolvimento deste MVP permitiu atingir os objetivos definidos inicialmente, com a construção de um pipeline de dados em ambiente de nuvem capaz de realizar a ingestão, o tratamento, a modelagem, a avaliação da qualidade e a análise de dados do mercado imobiliário.
+
+A utilização da arquitetura Medalhão permitiu organizar o fluxo de processamento em diferentes níveis de tratamento. A camada Bronze preservou os dados provenientes da fonte, a camada Silver concentrou os processos de limpeza e padronização e a camada Gold disponibilizou um modelo dimensional adequado ao consumo analítico.
+
+As seis perguntas definidas no início do projeto puderam ser analisadas a partir das tabelas construídas na camada Gold, permitindo comparar preços entre cidades, analisar diferenças entre venda e aluguel, observar a evolução temporal dos preços, avaliar indicadores de oferta, comparar o tempo de permanência dos imóveis no mercado e identificar bairros com maiores preços medianos por metro quadrado.
+
+Entre as principais dificuldades encontradas durante o desenvolvimento estiveram a compreensão da estrutura dos arquivos de origem, a definição dos tratamentos adequados para valores ausentes e valores iguais a zero e a interpretação dos valores extremos presentes na base.
+
+A avaliação da qualidade foi importante para evitar decisões automáticas que pudessem alterar indevidamente os dados. Em especial, optou-se por preservar valores extremos quando não havia evidência suficiente para classificá-los como erros e por não realizar imputação artificial dos valores ausentes nas métricas de preço.
+
+Outro ponto relevante foi a construção do modelo dimensional e a definição do grão da tabela fato, garantindo que as análises fossem realizadas sobre uma estrutura consistente e que os relacionamentos com as dimensões não provocassem perda ou multiplicação de registros.
+
+Como evolução futura, o pipeline poderia incorporar novas cidades, ampliar o período histórico analisado e utilizar fontes adicionais para comparação e validação dos valores observados. Também seria possível implementar mecanismos de atualização periódica dos dados e desenvolver painéis analíticos para acompanhamento dos principais indicadores do mercado imobiliário.
+
+De forma geral, o MVP possibilitou aplicar de maneira integrada os principais conceitos trabalhados na disciplina, incluindo ingestão de dados, arquitetura Medalhão, processamento com Apache Spark, armazenamento em Delta Lake, modelagem dimensional, catálogo de dados, avaliação de qualidade e análise de dados em ambiente de nuvem.

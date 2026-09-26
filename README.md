@@ -34,7 +34,7 @@ O resultado esperado é disponibilizar uma estrutura analítica capaz de compara
 5. Existem diferenças no tempo médio de permanência dos imóveis no mercado entre as cidades e entre os tipos de transação?
 6. Quais bairros apresentam os maiores preços medianos por metro quadrado em cada cidade?
 
-7. ## 2. Carga dos Dados
+## 2. Carga dos Dados
 
 ### 2.1 Fonte dos Dados
 

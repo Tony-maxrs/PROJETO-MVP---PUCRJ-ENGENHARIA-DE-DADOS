@@ -244,3 +244,98 @@ A estrutura lógica utilizada foi:
 - `mvp_imobiliario.gold`
 
 Essa organização permite separar os diferentes estágios de processamento e manter a rastreabilidade entre os dados de origem, os dados tratados e as estruturas destinadas à análise.
+
+## 5. Qualidade de Dados
+
+A avaliação da qualidade foi realizada sobre os dados tratados da camada Silver e sobre as estruturas dimensionais da camada Gold. Foram analisados aspectos de completude, consistência, unicidade, plausibilidade dos valores e presença de valores extremos.
+
+### 5.1 Completude
+
+A análise de completude identificou valores nulos principalmente nas métricas relacionadas ao preço por metro quadrado.
+
+Após o tratamento realizado na camada Silver, os resultados foram:
+
+| Campo | Valores nulos | Percentual aproximado |
+|---|---:|---:|
+| `mediana_m2` | 3.767 | 10,20% |
+| `p25_m2` | 3.767 | 10,20% |
+| `p75_m2` | 3.767 | 10,20% |
+| `dias_no_mercado_medio` | 22 | 0,06% |
+
+Os demais campos avaliados não apresentaram valores nulos.
+
+Os valores ausentes nas métricas de preço foram preservados como nulos, evitando a utilização de valores artificiais que poderiam distorcer as análises estatísticas.
+
+### 5.2 Consistência
+
+Foram realizadas verificações sobre os principais campos numéricos e categóricos.
+
+Não foram identificados valores negativos nas métricas:
+
+- `mediana_m2`;
+- `p25_m2`;
+- `p75_m2`;
+- `anuncios_ativos_media_dia`;
+- `novos_anuncios`;
+- `dias_no_mercado_medio`.
+
+Também foi verificada a relação esperada entre os percentis de preço:
+
+`p25_m2 ≤ mediana_m2 ≤ p75_m2`
+
+Não foram encontradas violações dessa regra nos registros em que as três métricas estavam disponíveis.
+
+Os campos categóricos também foram avaliados após a padronização realizada na camada Silver. O campo `transacao` apresentou apenas as categorias `venda` e `aluguel`, enquanto as UFs encontradas foram BA, PE, PR, RJ e SP, coerentes com as cinco cidades utilizadas no projeto.
+
+### 5.3 Unicidade
+
+A unicidade foi avaliada considerando o grão dos dados:
+
+`mes + cidade + uf + bairro + transacao`
+
+Foram encontrados **36.933 registros e 36.933 combinações distintas** desse conjunto de atributos.
+
+Portanto, não foram identificados registros duplicados no grão definido para os dados.
+
+Essa verificação também contribui para garantir que a construção posterior da tabela fato não provoque duplicidade das observações analíticas.
+
+### 5.4 Plausibilidade e Acurácia
+
+Como o projeto utiliza uma única fonte de dados e não dispõe de uma segunda base independente para comparação, não é possível comprovar a acurácia absoluta dos valores de mercado.
+
+Por esse motivo, a avaliação foi realizada sob a perspectiva de **plausibilidade e coerência interna**.
+
+Foram verificadas regras como:
+
+- inexistência de preços negativos;
+- inexistência de quantidades negativas de anúncios;
+- coerência entre os percentis de preço;
+- categorias válidas de transação;
+- correspondência das UFs com as cidades analisadas;
+- comportamento dos valores extremos.
+
+Essas verificações permitem identificar inconsistências estruturais ou valores incompatíveis com o contexto dos dados, sem assumir que a base representa um indicador oficial do mercado imobiliário.
+
+### 5.5 Valores Extremos
+
+A presença de valores extremos foi investigada utilizando o método do **Intervalo Interquartil (IQR)**.
+
+Foram identificadas observações acima dos limites calculados para diferentes métricas, incluindo preços por metro quadrado, quantidade de anúncios e tempo médio de permanência no mercado.
+
+Entretanto, a identificação estatística de um outlier não implica necessariamente erro nos dados. No mercado imobiliário, diferenças expressivas podem ocorrer em razão de características específicas das localidades, baixa quantidade de observações, imóveis de alto padrão ou particularidades dos bairros analisados.
+
+Por esse motivo, os valores extremos **não foram removidos automaticamente**. Eles foram preservados na base e considerados durante a interpretação dos resultados.
+
+Essa decisão evita eliminar observações potencialmente legítimas apenas por apresentarem comportamento estatisticamente distante da maior parte dos dados.
+
+### 5.6 Conclusão da Avaliação de Qualidade
+
+A avaliação demonstrou que o conjunto de dados apresenta estrutura adequada para as análises propostas, após os tratamentos realizados na camada Silver.
+
+Os principais problemas identificados foram a presença de valores ausentes nas métricas de preço, os 11 registros originalmente identificados com preços iguais a zero e a existência de valores extremos.
+
+Os preços iguais a zero foram convertidos para valores nulos, enquanto os demais valores ausentes foram mantidos sem imputação. Os valores extremos foram preservados, pois não havia evidência suficiente para classificá-los automaticamente como erros.
+
+Além disso, não foram identificadas duplicidades no grão dos dados, valores negativos nas métricas analisadas ou violações na relação entre os percentis de preço.
+
+Dessa forma, as decisões de tratamento buscaram preservar a informação original sempre que possível e evitar transformações que pudessem introduzir distorções artificiais nas análises.

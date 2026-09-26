@@ -164,3 +164,83 @@ A documentação do catálogo contempla a finalidade das tabelas e o significado
 | `anuncios_ativos_media_dia` | INT | Média diária de anúncios ativos | Valor igual ou superior a zero | Proveniente da camada Silver |
 | `novos_anuncios` | INT | Quantidade de novos anúncios | Valor igual ou superior a zero | Proveniente da camada Silver |
 | `dias_no_mercado_medio` | INT | Tempo médio de permanência dos imóveis no mercado | Valor igual ou superior a zero ou nulo | Proveniente da camada Silver |
+
+## 4. Pipeline de Dados
+
+### 4.1 Arquitetura do Pipeline
+
+O pipeline foi desenvolvido integralmente no **Databricks Free Edition**, utilizando Apache Spark (PySpark), Spark SQL, Delta Lake e Unity Catalog.
+
+A arquitetura adotada segue o padrão Medalhão, organizando o processamento dos dados em três camadas principais:
+
+**Fonte de Dados → Bronze → Silver → Gold → Qualidade → Análise**
+
+Cada etapa do pipeline foi implementada em um notebook específico, permitindo separar as responsabilidades de ingestão, transformação, modelagem, avaliação da qualidade e análise dos dados.
+
+Os notebooks foram organizados na seguinte sequência:
+
+1. `01_ingestao_bronze` — ingestão e consolidação dos arquivos de origem na camada Bronze;
+2. `02_transformacao_silver` — avaliação inicial, limpeza, padronização e tratamento dos dados;
+3. `03_modelagem_gold` — construção do modelo dimensional e persistência das dimensões e tabela fato;
+4. `04_qualidade_dados` — avaliação da qualidade dos dados;
+5. `05_analise_final` — realização das análises destinadas a responder às perguntas definidas no início do projeto.
+
+### 4.2 Fluxo Bronze → Silver
+
+A primeira etapa do pipeline realiza a leitura dos arquivos CSV armazenados no Volume do Unity Catalog e consolida os dados na tabela:
+
+`mvp_imobiliario.bronze.mercado_imobiliario_raw`
+
+A camada Bronze preserva os dados provenientes dos arquivos de origem e acrescenta metadados para garantir sua rastreabilidade.
+
+Na etapa seguinte, a tabela Bronze é utilizada como origem para a construção da camada Silver. Durante essa transformação foram realizadas verificações e tratamentos relacionados a:
+
+- valores nulos;
+- registros duplicados;
+- padronização de campos categóricos;
+- validação de campos numéricos;
+- identificação de valores iguais a zero;
+- investigação de valores extremos;
+- adequação dos tipos e estrutura dos dados.
+
+Foi identificado um conjunto de 11 registros com valor igual a zero simultaneamente nos campos de preço por metro quadrado. Esses valores foram considerados inadequados para representar preços imobiliários e foram convertidos para valores nulos.
+
+Valores iguais a zero em métricas nas quais esse valor possui interpretação válida, como quantidade de novos anúncios, foram preservados.
+
+Após os tratamentos, os dados foram persistidos na tabela:
+
+`mvp_imobiliario.silver.mercado_imobiliario_tratado`
+
+A transformação preservou os **36.933 registros** existentes na camada Bronze.
+
+### 4.3 Fluxo Silver → Gold
+
+A camada Silver é utilizada como origem para a construção do modelo dimensional da camada Gold.
+
+A partir dos dados tratados foram construídas as dimensões:
+
+- `dim_tempo`;
+- `dim_localidade`;
+- `dim_transacao`;
+
+e a tabela fato:
+
+- `fato_mercado_imobiliario`.
+
+Os relacionamentos foram realizados utilizando as chaves `id_tempo`, `id_localidade` e `id_transacao`.
+
+Após a construção do modelo, foram realizadas validações para verificar a integridade dos relacionamentos e a preservação do grão definido para a tabela fato.
+
+A camada Gold passou a representar a estrutura destinada ao consumo analítico, sendo utilizada nas etapas posteriores de avaliação da qualidade e análise das perguntas de negócio.
+
+### 4.4 Persistência dos Dados
+
+As tabelas das camadas Bronze, Silver e Gold foram persistidas no ambiente Databricks utilizando **Delta Lake** e organizadas no catálogo `mvp_imobiliario`.
+
+A estrutura lógica utilizada foi:
+
+- `mvp_imobiliario.bronze`
+- `mvp_imobiliario.silver`
+- `mvp_imobiliario.gold`
+
+Essa organização permite separar os diferentes estágios de processamento e manter a rastreabilidade entre os dados de origem, os dados tratados e as estruturas destinadas à análise.

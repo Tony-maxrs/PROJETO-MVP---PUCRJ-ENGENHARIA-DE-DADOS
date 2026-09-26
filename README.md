@@ -80,3 +80,87 @@ A tabela criada foi:
 Ao final da ingestão, foram consolidados **36.933 registros**.
 
 A tabela foi persistida utilizando o formato **Delta**, permitindo que os dados armazenados no ambiente Databricks sejam utilizados pelas etapas posteriores do pipeline.
+
+## 3. Modelagem e Catálogo de Dados
+
+### 3.1 Modelagem dos Dados
+
+Após o processo de tratamento realizado na camada Silver, os dados foram organizados na camada Gold utilizando um **modelo dimensional**, com separação entre dimensões e tabela fato.
+
+O modelo foi estruturado com três dimensões e uma tabela fato:
+
+- `dim_tempo`: dimensão responsável pela representação temporal das observações;
+- `dim_localidade`: dimensão contendo cidade, UF e bairro;
+- `dim_transacao`: dimensão responsável pela classificação do tipo de transação imobiliária;
+- `fato_mercado_imobiliario`: tabela fato contendo as métricas utilizadas nas análises do mercado imobiliário.
+
+O grão definido para a tabela fato corresponde a **uma observação mensal para cada combinação de período, localidade e tipo de transação**.
+
+Foram utilizadas chaves substitutas para realizar os relacionamentos entre a tabela fato e as dimensões:
+
+- `id_tempo`;
+- `id_localidade`;
+- `id_transacao`.
+
+A tabela fato contém as seguintes métricas:
+
+- `mediana_m2`;
+- `p25_m2`;
+- `p75_m2`;
+- `anuncios_ativos_media_dia`;
+- `novos_anuncios`;
+- `dias_no_mercado_medio`.
+
+A construção do modelo preservou os **36.933 registros** existentes na camada Silver. A integridade dos relacionamentos também foi validada, não sendo identificadas chaves dimensionais nulas após os relacionamentos entre a tabela fato e as dimensões.
+
+As tabelas resultantes da camada Gold foram:
+
+- `mvp_imobiliario.gold.dim_tempo` — 13 registros;
+- `mvp_imobiliario.gold.dim_localidade` — 2.129 registros;
+- `mvp_imobiliario.gold.dim_transacao` — 2 registros;
+- `mvp_imobiliario.gold.fato_mercado_imobiliario` — 36.933 registros.
+
+### 3.2 Catálogo de Dados
+
+O catálogo técnico das tabelas foi implementado no **Unity Catalog do Databricks**, onde foram adicionadas descrições às tabelas e aos seus respectivos campos.
+
+A documentação do catálogo contempla a finalidade das tabelas e o significado dos atributos utilizados no pipeline. Além da documentação registrada no Unity Catalog, o projeto apresenta a seguir a estrutura lógica dos principais campos utilizados no modelo dimensional.
+
+#### Dimensão Tempo — `dim_tempo`
+
+| Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
+|---|---|---|---|---|
+| `id_tempo` | BIGINT | Chave substituta da dimensão tempo | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `mes` | DATE | Mês de referência da observação | Datas mensais existentes na base | Proveniente do campo `mes` da camada Silver |
+| `ano` | INT | Ano da observação | Ano correspondente ao campo `mes` | Derivado de `mes` |
+| `numero_mes` | INT | Número do mês | Valores de 1 a 12 | Derivado de `mes` |
+
+#### Dimensão Localidade — `dim_localidade`
+
+| Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
+|---|---|---|---|---|
+| `id_localidade` | BIGINT | Chave substituta da dimensão localidade | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `cidade` | STRING | Cidade da observação | Salvador, São Paulo, Rio de Janeiro, Recife ou Curitiba | Proveniente da camada Silver |
+| `uf` | STRING | Unidade Federativa | BA, SP, RJ, PE ou PR | Proveniente da camada Silver |
+| `bairro` | STRING | Bairro associado à observação | Bairros existentes na base | Proveniente da camada Silver |
+
+#### Dimensão Transação — `dim_transacao`
+
+| Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
+|---|---|---|---|---|
+| `id_transacao` | BIGINT | Chave substituta da dimensão transação | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `transacao` | STRING | Tipo de transação imobiliária | `venda` ou `aluguel` | Campo padronizado na camada Silver |
+
+#### Tabela Fato — `fato_mercado_imobiliario`
+
+| Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
+|---|---|---|---|---|
+| `id_tempo` | BIGINT | Chave de relacionamento com `dim_tempo` | Chave válida da dimensão tempo | Relacionamento com `dim_tempo` |
+| `id_localidade` | BIGINT | Chave de relacionamento com `dim_localidade` | Chave válida da dimensão localidade | Relacionamento com `dim_localidade` |
+| `id_transacao` | BIGINT | Chave de relacionamento com `dim_transacao` | Chave válida da dimensão transação | Relacionamento com `dim_transacao` |
+| `mediana_m2` | INT | Preço mediano por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
+| `p25_m2` | INT | Percentil 25 do preço por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
+| `p75_m2` | INT | Percentil 75 do preço por metro quadrado | Valor positivo ou nulo | Proveniente da camada Silver |
+| `anuncios_ativos_media_dia` | INT | Média diária de anúncios ativos | Valor igual ou superior a zero | Proveniente da camada Silver |
+| `novos_anuncios` | INT | Quantidade de novos anúncios | Valor igual ou superior a zero | Proveniente da camada Silver |
+| `dias_no_mercado_medio` | INT | Tempo médio de permanência dos imóveis no mercado | Valor igual ou superior a zero ou nulo | Proveniente da camada Silver |

@@ -1,20 +1,19 @@
-# MVP – Pipeline de Dados no Databricks
+# MVP – Construção de um Pipeline de Dados na Nuvem
 
-Projeto desenvolvido como MVP acadêmico utilizando a plataforma Databricks para ingestão, tratamento e análise de dados financeiros (Receita e Despesa).
+Projeto desenvolvido como MVP acadêmico da Pós-Graduação em Ciência de Dados e Analytics da PUC-Rio, utilizando o Databricks para construção de um pipeline de Engenharia de Dados aplicado ao mercado imobiliário.
 
 ## Tecnologias utilizadas
-- Databricks
+
+- Databricks Free Edition
 - Apache Spark (PySpark)
-- SQL
+- Spark SQL
+- Delta Lake
+- Unity Catalog
+- Python
 
-## Objetivo
-Analisar o fluxo de caixa da empresa, calculando totais de receita, despesa, resultado financeiro e rankings de clientes e fornecedores.
+## 1. Contexto de Negócio e Perguntas
 
-## Estrutura do repositório
-- notebooks/: códigos do pipeline
-- dados/: arquivos CSV utilizados
-- 
-## Contexto de Negócio
+### 1.1 Contexto de Negócio
 
 O mercado imobiliário apresenta diferenças significativas de preços, oferta e dinâmica de comercialização entre diferentes localidades. A análise dessas informações pode auxiliar empresas do setor imobiliário, incorporadoras, investidores e demais agentes do mercado na compreensão do comportamento de diferentes regiões e na identificação de padrões relevantes para a tomada de decisão.
 
@@ -22,14 +21,15 @@ Este projeto tem como objetivo construir um pipeline de dados em ambiente de nuv
 
 Os dados utilizados contêm informações mensais por bairro relacionadas aos preços por metro quadrado, quantidade de anúncios, entrada de novos anúncios e tempo médio de permanência dos imóveis no mercado.
 
-A partir desses dados, será implementada uma arquitetura de dados em camadas Bronze, Silver e Gold, utilizando o Databricks Free Edition. A camada Bronze armazenará os dados em seu estado original; a Silver será responsável pela limpeza, padronização, integração e validação; e a Gold disponibilizará os dados estruturados para análises por meio de um modelo dimensional.
+A solução foi estruturada utilizando a arquitetura Medalhão, composta pelas camadas Bronze, Silver e Gold. A camada Bronze preserva os dados provenientes da fonte; a camada Silver realiza limpeza, padronização e tratamento; e a camada Gold disponibiliza os dados por meio de um modelo dimensional destinado ao consumo analítico.
 
-O resultado esperado é disponibilizar uma estrutura analítica capaz de comparar diferentes mercados imobiliários e identificar padrões relacionados a preços, oferta, liquidez e evolução temporal.
+O resultado esperado é disponibilizar uma estrutura analítica capaz de comparar os mercados imobiliários estudados e identificar padrões relacionados a preços, oferta, permanência dos imóveis no mercado e evolução temporal.
 
-## Perguntas do Projeto 
-Quais cidades e bairros apresentam os maiores e menores preços medianos por metro quadrado para venda e aluguel?
-Como o preço mediano por metro quadrado evoluiu ao longo do período analisado nas cinco cidades?
-Quais cidades e bairros apresentam maior volume de novos anúncios e maior oferta média de imóveis?
-Quais localidades apresentam maior e menor tempo médio de permanência dos imóveis no mercado?
-Existe relação entre o preço mediano por metro quadrado e o tempo médio de permanência dos imóveis no mercado?
-Quais localidades apresentam simultaneamente crescimento do preço mediano por metro quadrado e aumento da oferta de imóveis ao longo do período?
+### 1.2 Perguntas do Projeto
+
+1. Como o preço mediano por metro quadrado varia entre as cinco cidades analisadas?
+2. Quais cidades apresentam os maiores e os menores preços medianos por metro quadrado para imóveis destinados à venda e ao aluguel?
+3. Como o preço mediano por metro quadrado evoluiu ao longo do período analisado em cada cidade?
+4. Como se comporta a oferta de imóveis nas cidades analisadas, considerando a quantidade média de anúncios ativos e a entrada de novos anúncios?
+5. Existem diferenças no tempo médio de permanência dos imóveis no mercado entre as cidades e entre os tipos de transação?
+6. Quais bairros apresentam os maiores preços medianos por metro quadrado em cada cidade?

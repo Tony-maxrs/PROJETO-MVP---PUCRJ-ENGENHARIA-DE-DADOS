@@ -339,3 +339,173 @@ Os preços iguais a zero foram convertidos para valores nulos, enquanto os demai
 Além disso, não foram identificadas duplicidades no grão dos dados, valores negativos nas métricas analisadas ou violações na relação entre os percentis de preço.
 
 Dessa forma, as decisões de tratamento buscaram preservar a informação original sempre que possível e evitar transformações que pudessem introduzir distorções artificiais nas análises.
+
+## 6. Análise de Dados
+
+As análises foram realizadas utilizando as tabelas dimensionais da camada Gold. Os resultados apresentados nesta seção correspondem exclusivamente ao conjunto de dados e ao período analisado, não devendo ser interpretados como indicadores oficiais de todo o mercado imobiliário das cidades.
+
+### 6.1 Preço mediano por metro quadrado entre as cidades
+
+**Pergunta:** Como o preço mediano por metro quadrado varia entre as cinco cidades analisadas?
+
+A comparação dos valores medianos encontrados apresentou o seguinte resultado:
+
+| Cidade | Preço mediano por m² |
+|---|---:|
+| Curitiba | R$ 5.543 |
+| São Paulo | R$ 4.133 |
+| Rio de Janeiro | R$ 3.333 |
+| Recife | R$ 3.285 |
+| Salvador | R$ 2.875 |
+
+No conjunto de dados analisado, Curitiba apresentou o maior preço mediano por metro quadrado, enquanto Salvador apresentou o menor.
+
+O valor observado em Curitiba foi aproximadamente **93% superior** ao encontrado em Salvador, evidenciando diferenças relevantes entre os mercados das cidades analisadas.
+
+### 6.2 Preço por tipo de transação
+
+**Pergunta:** Quais cidades apresentam os maiores e os menores preços medianos por metro quadrado para imóveis destinados à venda e ao aluguel?
+
+Para imóveis destinados à **venda**, foram observados:
+
+| Cidade | Preço mediano por m² |
+|---|---:|
+| Curitiba | R$ 8.137 |
+| Recife | R$ 7.236 |
+| São Paulo | R$ 5.556 |
+| Salvador | R$ 4.616 |
+| Rio de Janeiro | R$ 4.379 |
+
+No segmento de venda, Curitiba apresentou o maior valor mediano entre as cidades analisadas, enquanto o Rio de Janeiro apresentou o menor.
+
+Para imóveis destinados ao **aluguel**, os resultados foram:
+
+| Cidade | Preço mediano por m² |
+|---|---:|
+| Recife | R$ 54 |
+| Curitiba | R$ 42 |
+| Salvador | R$ 42 |
+| São Paulo | R$ 37 |
+| Rio de Janeiro | R$ 31 |
+
+No segmento de aluguel, Recife apresentou o maior valor mediano, enquanto o Rio de Janeiro apresentou o menor.
+
+Os resultados demonstram que a posição relativa das cidades varia de acordo com o tipo de transação, reforçando a importância de analisar venda e aluguel separadamente.
+
+### 6.3 Evolução temporal dos preços
+
+**Pergunta:** Como o preço mediano por metro quadrado evoluiu ao longo do período analisado em cada cidade?
+
+A análise temporal mostrou comportamentos distintos entre as cinco cidades.
+
+Curitiba permaneceu com os maiores valores durante todo o período e apresentou crescimento nos meses finais da série. São Paulo apresentou comportamento relativamente estável, com valores próximos de R$ 4 mil por metro quadrado durante grande parte do período.
+
+O Rio de Janeiro apresentou tendência geral de crescimento do preço mediano por metro quadrado no conjunto de dados analisado. Salvador permaneceu em patamar inferior às demais cidades durante grande parte da série, também apresentando elevação nos meses finais.
+
+Recife apresentou comportamento diferente das demais localidades, com valores mais elevados no início da série e redução ao longo dos meses analisados.
+
+Esses resultados mostram que a evolução dos preços não ocorreu de maneira uniforme entre as cidades.
+
+### 6.4 Oferta de imóveis
+
+**Pergunta:** Como se comporta a oferta de imóveis nas cidades analisadas, considerando a quantidade média de anúncios ativos e a entrada de novos anúncios?
+
+A mediana da quantidade média diária de anúncios ativos apresentou os seguintes resultados:
+
+| Cidade | Mediana de anúncios ativos |
+|---|---:|
+| Curitiba | 15 |
+| São Paulo | 5 |
+| Rio de Janeiro | 5 |
+| Recife | 4 |
+| Salvador | 4 |
+
+Curitiba apresentou o maior nível mediano de anúncios ativos no conjunto analisado.
+
+Para a entrada de novos anúncios, foram observadas as seguintes medianas:
+
+| Cidade | Mediana de novos anúncios |
+|---|---:|
+| Curitiba | 1 |
+| Recife | 1 |
+| São Paulo | 0 |
+| Rio de Janeiro | 0 |
+| Salvador | 0 |
+
+A mediana igual a zero não significa ausência total de novos anúncios durante o período. Ela indica que, considerando as observações disponíveis por bairro e período, pelo menos metade apresentou valor igual a zero para essa métrica.
+
+### 6.5 Tempo de permanência no mercado
+
+**Pergunta:** Existem diferenças no tempo médio de permanência dos imóveis no mercado entre as cidades e entre os tipos de transação?
+
+Os valores medianos encontrados foram:
+
+| Cidade | Aluguel (dias) | Venda (dias) |
+|---|---:|---:|
+| Curitiba | 285 | 441 |
+| Recife | 170 | 291 |
+| Rio de Janeiro | 225 | 651 |
+| Salvador | 328 | 543 |
+| São Paulo | 324 | 583 |
+
+Em todas as cinco cidades analisadas, os imóveis destinados à venda apresentaram maior tempo mediano de permanência no mercado do que os imóveis destinados ao aluguel.
+
+Entre os registros de venda, o Rio de Janeiro apresentou o maior valor mediano, com 651 dias, enquanto Recife apresentou o menor, com 291 dias.
+
+No aluguel, Salvador apresentou 328 dias e São Paulo 324 dias, enquanto Recife apresentou o menor valor, com 170 dias.
+
+Os resultados indicam diferenças tanto entre cidades quanto entre os tipos de transação.
+
+### 6.6 Bairros com maiores preços medianos
+
+**Pergunta:** Quais bairros apresentam os maiores preços medianos por metro quadrado em cada cidade?
+
+A análise dos bairros revelou diferenças expressivas dentro das próprias cidades.
+
+Os cinco bairros com maiores valores medianos encontrados em cada cidade foram:
+
+| Cidade | Bairro | Preço mediano por m² |
+|---|---|---:|
+| Curitiba | Champagnat | R$ 18.304 |
+| Curitiba | Batel | R$ 16.486 |
+| Curitiba | Barigui | R$ 15.813 |
+| Curitiba | Hugo Lange | R$ 12.846 |
+| Curitiba | Cabral | R$ 12.338 |
+| Recife | Ilha Joana Bezerra | R$ 20.704 |
+| Recife | Cabanga | R$ 16.791 |
+| Recife | Brasília Teimosa | R$ 13.203 |
+| Recife | Monteiro | R$ 9.886 |
+| Recife | Poço | R$ 9.528 |
+| Rio de Janeiro | Ricardo de Albuquerque | R$ 183.246 |
+| Rio de Janeiro | Magalhães Bastos | R$ 46.078 |
+| Rio de Janeiro | Vidigal | R$ 39.004 |
+| Rio de Janeiro | Urca | R$ 16.917 |
+| Rio de Janeiro | Península-Barra | R$ 16.456 |
+| Salvador | Corredor da Vitória | R$ 14.842 |
+| Salvador | Aquarius | R$ 10.138 |
+| Salvador | Alphaville 2 | R$ 10.072 |
+| Salvador | Loteamento Aquarius | R$ 8.750 |
+| Salvador | Jardim Armação | R$ 8.489 |
+| São Paulo | Vila São Luís (Zona Oeste) | R$ 520.000 |
+| São Paulo | Jardim Adutora | R$ 408.739 |
+| São Paulo | Rural | R$ 153.226 |
+| São Paulo | Av. Paulista | R$ 74.691 |
+| São Paulo | Jardim Everest | R$ 63.714 |
+
+Alguns bairros apresentam valores muito superiores ao comportamento predominante do conjunto de dados. Conforme discutido na avaliação de qualidade, esses registros foram identificados como valores extremos, mas não foram automaticamente removidos por não existir evidência suficiente para classificá-los como erros.
+
+Portanto, esses resultados devem ser interpretados considerando as características e limitações da fonte utilizada.
+
+### 6.7 Discussão Geral dos Resultados
+
+As análises demonstram que os mercados imobiliários das cinco cidades apresentam comportamentos distintos em relação a preço, oferta e tempo de permanência dos imóveis.
+
+Curitiba apresentou o maior preço mediano por metro quadrado quando as observações foram analisadas de forma agregada e também apresentou maior mediana de anúncios ativos. Entretanto, a segmentação por tipo de transação mostrou que a posição relativa das cidades muda entre venda e aluguel.
+
+A análise temporal também demonstrou trajetórias diferentes entre as cidades, indicando que não existe um comportamento único de evolução dos preços no período analisado.
+
+O tempo de permanência apresentou diferenças relevantes entre venda e aluguel, sendo superior para venda em todas as cidades analisadas.
+
+Por fim, a análise por bairro revelou elevada heterogeneidade dentro das próprias cidades e também evidenciou a presença de valores extremos. Esses resultados reforçam a importância das etapas de avaliação da qualidade e contextualização dos dados antes da interpretação analítica.
+
+Considerando as seis perguntas definidas no início do projeto, o pipeline construído permitiu transformar os arquivos de origem em uma estrutura organizada e analítica, possibilitando responder às questões propostas a partir das tabelas da camada Gold.

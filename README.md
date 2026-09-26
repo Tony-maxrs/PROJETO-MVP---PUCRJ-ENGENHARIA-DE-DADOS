@@ -67,6 +67,9 @@ Durante o processo também foram adicionados metadados para permitir a identific
 - `uf`: identifica a Unidade Federativa;
 - `data_ingestao`: registra o momento da ingestão no ambiente de dados.
 
+<img width="1916" height="946" alt="Evidencia 09_dados_origem_bronze_volume" src="https://github.com/user-attachments/assets/71eaf726-edc0-429b-acf2-ab52b1d130e6" />
+
+
 ### 2.3 Camada Bronze
 
 Após a leitura e consolidação dos cinco arquivos, os dados foram armazenados na camada **Bronze** da arquitetura Medalhão.
@@ -80,6 +83,9 @@ A tabela criada foi:
 Ao final da ingestão, foram consolidados **36.933 registros**.
 
 A tabela foi persistida utilizando o formato **Delta**, permitindo que os dados armazenados no ambiente Databricks sejam utilizados pelas etapas posteriores do pipeline.
+
+<img width="1915" height="944" alt="Evidencia 08_bronze_mercadoimob_raw" src="https://github.com/user-attachments/assets/66424de3-96ca-48c3-9c75-6fbe2cd16795" />
+
 
 ## 3. Modelagem e Catálogo de Dados
 
@@ -120,6 +126,9 @@ As tabelas resultantes da camada Gold foram:
 - `mvp_imobiliario.gold.dim_transacao` — 2 registros;
 - `mvp_imobiliario.gold.fato_mercado_imobiliario` — 36.933 registros.
 
+<img width="1918" height="942" alt="Evidencia 02_tabelas_modelo_dimensional_nacamada_gold" src="https://github.com/user-attachments/assets/57bad5bd-0351-434a-8f33-d904a8f2a6e6" />
+
+
 ### 3.2 Catálogo de Dados
 
 O catálogo técnico das tabelas foi implementado no **Unity Catalog do Databricks**, onde foram adicionadas descrições às tabelas e aos seus respectivos campos.
@@ -134,6 +143,7 @@ A documentação contempla a finalidade de cada tabela, o significado dos atribu
 | `mes` | DATE | Mês de referência da observação | Datas mensais existentes na base | Proveniente do campo `mes` da camada Silver |
 | `ano` | INT | Ano da observação | Ano correspondente ao campo `mes` | Derivado de `mes` |
 | `numero_mes` | INT | Número do mês | Valores de 1 a 12 | Derivado de `mes` |
+| `ano_mes` | STRING | Identificação do período no formato AAAA-MM | Valores no formato `AAAA-MM` | Derivado do campo `mes` |
 
 #### Dimensão Localidade — `dim_localidade`
 
@@ -165,6 +175,15 @@ A documentação contempla a finalidade de cada tabela, o significado dos atribu
 | `novos_anuncios` | INT | Quantidade de novos anúncios registrados no período | Valor igual ou superior a zero | Proveniente da camada Silver |
 | `dias_no_mercado_medio` | INT | Quantidade média de dias dos imóveis no mercado | Valor igual ou superior a zero ou nulo | Proveniente da camada Silver |
 
+<img width="1916" height="939" alt="Evidencia 03_fatomercado_imobiliario" src="https://github.com/user-attachments/assets/bb81a7d0-5665-4dbd-9124-a67da94f72b4" />
+
+<img width="1913" height="941" alt="Evidencia 04_dim_tempo" src="https://github.com/user-attachments/assets/9f7da47e-ddbb-41f4-8aa2-edbb68feb6e1" />
+
+<img width="1918" height="941" alt="Evidencia 05_dim_localidade" src="https://github.com/user-attachments/assets/d25e1db5-9346-4aa7-b01b-ef13e39a0c35" />
+
+<img width="1911" height="939" alt="Evidencia 06_dim_transacao" src="https://github.com/user-attachments/assets/624daddd-34e9-43a7-82f2-30213cadcc14" />
+
+
 ## 4. Pipeline de Dados
 
 ### 4.1 Arquitetura do Pipeline
@@ -184,6 +203,9 @@ Os notebooks foram organizados na seguinte sequência:
 3. `03_modelagem_gold` — construção do modelo dimensional e persistência das dimensões e tabela fato;
 4. `04_qualidade_dados` — avaliação da qualidade dos dados;
 5. `05_analise_final` — realização das análises destinadas a responder às perguntas definidas no início do projeto.
+
+<img width="1911" height="960" alt="Evidencia 10_organizacao_notebooks" src="https://github.com/user-attachments/assets/f685faa7-d732-45f3-b93b-2d541455a7a5" />
+
 
 ### 4.2 Fluxo Bronze → Silver
 
@@ -212,6 +234,9 @@ Após os tratamentos, os dados foram persistidos na tabela:
 `mvp_imobiliario.silver.mercado_imobiliario_tratado`
 
 A transformação preservou os **36.933 registros** existentes na camada Bronze.
+
+<img width="1917" height="940" alt="Evidencia 07_camada_silver_mercadoimob_tratado" src="https://github.com/user-attachments/assets/945bb06b-eccb-4469-a636-22d8b7ce71b3" />
+
 
 ### 4.3 Fluxo Silver → Gold
 
@@ -248,6 +273,9 @@ Essa organização permite separar os diferentes estágios de processamento e ma
 ## 5. Qualidade de Dados
 
 A avaliação da qualidade foi realizada sobre os dados tratados da camada Silver e sobre as estruturas dimensionais da camada Gold. Foram analisados aspectos de completude, consistência, unicidade, plausibilidade dos valores e presença de valores extremos.
+
+<img width="1915" height="942" alt="Evidencia 01_organizacao_camadas_bronze_silver_gold" src="https://github.com/user-attachments/assets/b12e1380-805b-4d21-8c8e-889db15bc16d" />
+
 
 ### 5.1 Completude
 
@@ -362,6 +390,9 @@ No conjunto de dados analisado, Curitiba apresentou o maior preço mediano por m
 
 O valor observado em Curitiba foi aproximadamente **93% superior** ao encontrado em Salvador, evidenciando diferenças relevantes entre os mercados das cidades analisadas.
 
+<img width="1912" height="944" alt="Evidencia 11_analise_pergunta01" src="https://github.com/user-attachments/assets/b133f337-c793-4f2a-8dca-96b2666a8e27" />
+
+
 ### 6.2 Preço por tipo de transação
 
 **Pergunta:** Quais cidades apresentam os maiores e os menores preços medianos por metro quadrado para imóveis destinados à venda e ao aluguel?
@@ -392,6 +423,9 @@ No segmento de aluguel, Recife apresentou o maior valor mediano, enquanto o Rio 
 
 Os resultados demonstram que a posição relativa das cidades varia de acordo com o tipo de transação, reforçando a importância de analisar venda e aluguel separadamente.
 
+<img width="1902" height="909" alt="Evidencia 12_analise_pergunta02" src="https://github.com/user-attachments/assets/89b46c0c-7935-4215-85c2-9520a4cc1533" />
+
+
 ### 6.3 Evolução temporal dos preços
 
 **Pergunta:** Como o preço mediano por metro quadrado evoluiu ao longo do período analisado em cada cidade?
@@ -405,6 +439,9 @@ O Rio de Janeiro apresentou tendência geral de crescimento do preço mediano po
 Recife apresentou comportamento diferente das demais localidades, com valores mais elevados no início da série e redução ao longo dos meses analisados.
 
 Esses resultados mostram que a evolução dos preços não ocorreu de maneira uniforme entre as cidades.
+
+<img width="1918" height="938" alt="Evidencia 13_analise_pergunta03" src="https://github.com/user-attachments/assets/614bdd58-6e0c-4e17-a79d-0b425e794524" />
+
 
 ### 6.4 Oferta de imóveis
 
@@ -434,6 +471,9 @@ Para a entrada de novos anúncios, foram observadas as seguintes medianas:
 
 A mediana igual a zero não significa ausência total de novos anúncios durante o período. Ela indica que, considerando as observações disponíveis por bairro e período, pelo menos metade apresentou valor igual a zero para essa métrica.
 
+<img width="1908" height="941" alt="Evidencia 14_analise_pergunta04" src="https://github.com/user-attachments/assets/068732bd-4221-4d0a-911e-3cba1d859a8f" />
+
+
 ### 6.5 Tempo de permanência no mercado
 
 **Pergunta:** Existem diferenças no tempo médio de permanência dos imóveis no mercado entre as cidades e entre os tipos de transação?
@@ -455,6 +495,9 @@ Entre os registros de venda, o Rio de Janeiro apresentou o maior valor mediano, 
 No aluguel, Salvador apresentou 328 dias e São Paulo 324 dias, enquanto Recife apresentou o menor valor, com 170 dias.
 
 Os resultados indicam diferenças tanto entre cidades quanto entre os tipos de transação.
+
+<img width="1917" height="944" alt="Evidencia 15_analise_pergunta05" src="https://github.com/user-attachments/assets/35d6b491-f44a-430b-9bfe-b2b1a33686cd" />
+
 
 ### 6.6 Bairros com maiores preços medianos
 
@@ -495,6 +538,9 @@ Os cinco bairros com maiores valores medianos encontrados em cada cidade foram:
 Alguns bairros apresentam valores muito superiores ao comportamento predominante do conjunto de dados. Conforme discutido na avaliação de qualidade, esses registros foram identificados como valores extremos, mas não foram automaticamente removidos por não existir evidência suficiente para classificá-los como erros.
 
 Portanto, esses resultados devem ser interpretados considerando as características e limitações da fonte utilizada.
+
+<img width="1912" height="940" alt="Evidencia 16_analise_pergunta06" src="https://github.com/user-attachments/assets/0640e550-8325-411d-aa61-6bc14524d241" />
+
 
 ### 6.7 Discussão Geral dos Resultados
 

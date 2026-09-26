@@ -130,7 +130,7 @@ A documentação do catálogo contempla a finalidade das tabelas e o significado
 
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
-| `id_tempo` | BIGINT | Chave substituta da dimensão tempo | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `id_tempo` | INT | Chave substituta da dimensão tempo | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
 | `mes` | DATE | Mês de referência da observação | Datas mensais existentes na base | Proveniente do campo `mes` da camada Silver |
 | `ano` | INT | Ano da observação | Ano correspondente ao campo `mes` | Derivado de `mes` |
 | `numero_mes` | INT | Número do mês | Valores de 1 a 12 | Derivado de `mes` |
@@ -139,7 +139,7 @@ A documentação do catálogo contempla a finalidade das tabelas e o significado
 
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
-| `id_localidade` | BIGINT | Chave substituta da dimensão localidade | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `id_localidade` | INT | Chave substituta da dimensão localidade | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
 | `cidade` | STRING | Cidade da observação | Salvador, São Paulo, Rio de Janeiro, Recife ou Curitiba | Proveniente da camada Silver |
 | `uf` | STRING | Unidade Federativa | BA, SP, RJ, PE ou PR | Proveniente da camada Silver |
 | `bairro` | STRING | Bairro associado à observação | Bairros existentes na base | Proveniente da camada Silver |
@@ -148,7 +148,7 @@ A documentação do catálogo contempla a finalidade das tabelas e o significado
 
 | Campo | Tipo | Descrição | Domínio / Valores esperados | Origem / Transformação |
 |---|---|---|---|---|
-| `id_transacao` | BIGINT | Chave substituta da dimensão transação | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
+| `id_transacao` | INT | Chave substituta da dimensão transação | Valores inteiros únicos e não nulos | Gerada durante a construção da dimensão |
 | `transacao` | STRING | Tipo de transação imobiliária | `venda` ou `aluguel` | Campo padronizado na camada Silver |
 
 #### Tabela Fato — `fato_mercado_imobiliario`
